@@ -12,6 +12,13 @@ if ($ENV{CARD}) {
     });
 
     ok($ccs->login()->is_success);
+
+    # this will croak() if anything goes wrong:
+    my @renewables = $ccs->get_renewable_items();
+    foreach my $item (@renewables) {
+        warn "$item->{label} is due $item->{duedate}";
+    }
+
 }
 else {
     warn "Not testing login\n";
