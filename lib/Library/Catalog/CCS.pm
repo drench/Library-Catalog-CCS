@@ -82,6 +82,7 @@ sub parse_renewal_screen {
     while (my $td = $p->get_token) {
         next if $td->[0] ne 'S';
         next if $td->[1] ne 'td';
+        next if ! $td->[2]->{class};
         next if $td->[2]->{class} !~ /^itemlisting/;
 
         my $item = Library::Catalog::CCS::Item->new({parent => $self});
