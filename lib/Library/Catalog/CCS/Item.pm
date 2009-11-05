@@ -20,7 +20,9 @@ sub renew {
     my $resp = $self->{parent}{mech}->submit_form(
         form_name => 'renewitems',
         fields    => {
-            $self->{parent}{checkbox} => 'on',
+            selection_type    => 'selected', # as opposed to "all"
+            $self->{checkbox} => 'on',
+            user_id           => $self->{parent}{card},
         },
     );
     croak($resp->as_string) if $resp->is_error;

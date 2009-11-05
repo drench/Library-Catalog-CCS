@@ -34,6 +34,8 @@ sub login {
 
     $self->{password} = 'Patron' if ! defined $self->{password};
 
+    $self->{mech}->cookie_jar({}); # clear cookies
+
     my $resp = $self->{mech}->get($BASEURL);
     croak($resp->as_string) if $resp->is_error;
 
