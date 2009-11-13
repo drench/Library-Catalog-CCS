@@ -136,26 +136,29 @@ sub parse_renewal_screen {
             $duedate .= $dd->[1];
         }
    
-        if ($duedate =~ m{(\d{1,2})/(\d{1,2})/(\d{4}),(\d\d):(\d\d)}) {
-            $item->{duedate} = DateTime->new(
-                year      => $3,
-                month     => $1,
-                day       => $2,
-                hour      => $4,
-                minute    => $5,
-                second    => 0,
-                time_zone => 'America/Chicago',
-            );
-        }
-        else {
-            croak("Bad duedate '$duedate'");
-        }
+        $item->{duedate} = parse_ccsdate($duedate)
+            or croak("Bad duedate '$duedate'");
 
         push @items, $item;
 
     }
 
     return @items;
+}
+
+sub parse_ccsdate {
+    my $dt = shift;
+    if ($dt =~ m{(\d{1,2}) / (\d{1,2}) / (\d{4}) , (\d\d) : (\d\d)}x) {
+        return DateTime->new(
+            month     => $1,
+            day       => $2,
+            year      => $3,
+            hour      => $4,
+            minute    => $5,
+            time_zone => 'America/Chicago',
+        );
+    }
+    return;
 }
 
 1;
