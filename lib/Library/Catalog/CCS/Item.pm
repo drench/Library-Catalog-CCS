@@ -65,6 +65,8 @@ sub parse_renewal_result {
 
         return \%info;
     }
+
+    return;
 }
 
 sub renew {
