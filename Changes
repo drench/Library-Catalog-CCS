@@ -2,3 +2,6 @@ Revision history for Perl extension Library::Catalog::CCS
 
 0.01  Sun Nov  1 20:11:51 CST 2009
     - original version
+
+0.02  Sat Nov 14 17:06:16 CST 2009
+    - renewals work, has docs, perlcritic is (mostly) happy
