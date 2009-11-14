@@ -4,7 +4,7 @@ use strict;
 use integer;
 use warnings;
 
-our $VERSION = 0.01;
+our $VERSION = 0.02;
 
 =head1
 
