@@ -1,5 +1,9 @@
 package Library::Catalog::CCS;
 
+use strict;
+use integer;
+use warnings;
+
 our $VERSION = 0.01;
 
 =head1
@@ -36,10 +40,6 @@ Library::Catalog::CCS - An interface to CCS library catalog systems
 =head1 USAGE
 
 =cut
-
-use strict;
-use integer;
-use warnings;
 
 use Carp 'croak';
 use DateTime ();
