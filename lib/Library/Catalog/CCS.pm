@@ -2,6 +2,41 @@ package Library::Catalog::CCS;
 
 our $VERSION = 0.01;
 
+=head1
+
+Library::Catalog::CCS - An interface to CCS library catalog systems
+
+=head1 SYNOPSIS
+
+  use Library::Catalog::CCS ();
+
+  my $ccs = Library::Catalog::CCS->new({
+    card => '21123000000000', password => 'ah7vauQu',
+  });
+
+  my $cutoff = DateTime->today() - DateTime::Duration->new(days => -1);
+
+  foreach my $item ($ccs->get_renewable_items) {
+
+    print $item->{duedate}->mdy('/'), ": $item->{label}\n";
+
+    if ($item->{duedate} <= $cutoff) {
+      my $result = $item->renew();
+      if ($result) {
+        print "\tRenewed; now due " . $result->{Due}->mdy('/') . "\n";
+      }
+      else {
+        print "\tUnable to renew!\n";
+      }
+    }
+  }
+
+=head1 DESCRIPTION
+
+=head1 USAGE
+
+=cut
+
 use strict;
 use integer;
 use warnings;
@@ -162,3 +197,31 @@ sub parse_ccsdate {
 }
 
 1;
+
+=head1 AUTHOR
+
+Daniel Rench <citric@cubicone.tmetic.com>
+
+=head1 COPYRIGHT
+
+Copyright (c) 2009 Daniel Rench
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+
+=cut
