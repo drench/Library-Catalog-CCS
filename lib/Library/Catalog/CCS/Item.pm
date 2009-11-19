@@ -4,7 +4,12 @@ use strict;
 use integer;
 use warnings;
 
-BEGIN { $::{parse_ccsdate} = $Library::Catalog::CCS::{parse_ccsdate} }
+use Carp qw(carp croak);
+
+BEGIN {
+    no strict 'refs';
+    *{'parse_ccsdate'} = \&{'Library::Catalog::CCS::parse_ccsdate'};
+}
 
 sub new {
     my $class = shift;
