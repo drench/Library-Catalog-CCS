@@ -62,7 +62,7 @@ sub login {
         croak('No card number; cannot log in!');
     }
 
-    $self->{card} =~ s/\D+//gs;
+    $self->{card} =~ s/\D+//gsx;
     if (! length $self->{card}) {
         croak('Invalid card number; cannot log in!');
     }
@@ -101,8 +101,8 @@ sub get_renewable_items {
     my $self = shift;
 
     $self->login();
-    $self->click_link(text_regex => qr{\bMy\sAccount\b});
-    my $resp = $self->click_link(text_regex => qr{\bRenew\sMy\sMaterials\b});
+    $self->click_link(text_regex => qr{\bMy\sAccount\b}x);
+    my $resp = $self->click_link(text_regex => qr{\bRenew\sMy\sMaterials\b}x);
 
     return $self->parse_renewal_screen($resp);
 }
@@ -120,7 +120,7 @@ sub parse_renewal_screen {
         next if $td->[0] ne 'S';
         next if $td->[1] ne 'td';
         next if ! $td->[2]->{class};
-        next if $td->[2]->{class} !~ /^itemlisting/;
+        next if $td->[2]->{class} !~ /^itemlisting/x;
 
         my $item = Library::Catalog::CCS::Item->new({parent => $self});
    
@@ -150,10 +150,10 @@ sub parse_renewal_screen {
             }
         }
         for ($lt) {
-            s/&nbsp;&nbsp;/: /gs;
-            s/\s+/ /gs;
-            s/^\s+//;
-            s/\s+$//;
+            s/&nbsp;&nbsp;/: /gsx;
+            s/\s+/ /gsx;
+            s/^\s+//x;
+            s/\s+$//x;
         }
 
         $item->{label} = $lt;
@@ -164,7 +164,7 @@ sub parse_renewal_screen {
             last;
         }
    
-        my $duedate = '';
+        my $duedate = q{};
         while (my $dd = $p->get_token) {
             last if ($dd->[0] eq 'E') && ($dd->[1] eq 'strong');
             next if $dd->[0] ne 'T';

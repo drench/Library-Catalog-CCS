@@ -28,14 +28,14 @@ sub parse_renewal_result {
     while (my $t = $p->get_token) {
         next unless ($t->[0] eq 'S') && ($t->[1] eq 'strong');
 
-        my $txt = '';
+        my $txt = q{};
         while ($t = $p->get_token) {
             last if ($t->[0] eq 'E') && ($t->[1] eq 'strong');
             next unless $t->[0] eq 'T';
             $txt .= $t->[1];
         }
 
-        for ($txt) { s/[\r\n]+/ /gs; s/\s+/ /gs; s/^\s+//; s/\s+$//; }
+        for ($txt) { s/[\r\n]+/ /gsx; s/\s+/ /gsx; s/^\s+//x; s/\s+$//x; }
 
 # FIX: make sure $txt really contains what we expected
         carp($txt);
@@ -52,9 +52,9 @@ sub parse_renewal_result {
         while ($t = $p->get_token) {
             last if ($t->[1] eq 'E') && ($t->[1] eq 'dd');
             next unless $t->[0] eq 'T';
-            next if $t->[1] !~ /\S/;
+            next if $t->[1] !~ /\S/x;
 
-            if ($t->[1] =~ /\b(.+):\s/) {
+            if ($t->[1] =~ /\b(.+):\s/x) {
                 $k = $1;
             }
             elsif (defined $k) {
@@ -78,8 +78,8 @@ sub renew {
     my $self = shift;
 
     $self->{parent}->login();
-    $self->{parent}->click_link(text_regex => qr{\bMy\sAccount\b});
-    $self->{parent}->click_link(text_regex => qr{\bRenew\sMy\sMaterials\b});
+    $self->{parent}->click_link(text_regex => qr{\bMy\sAccount\b}x);
+    $self->{parent}->click_link(text_regex => qr{\bRenew\sMy\sMaterials\b}x);
 
     my $resp = $self->{parent}{mech}->submit_form(
         form_name => 'renewitems',
